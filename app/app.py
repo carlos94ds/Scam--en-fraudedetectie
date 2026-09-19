@@ -59,17 +59,106 @@ def cached_resources():
 
 def inject_css():
     st.markdown("""
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-    html, body, [class*="css"] { font-size: 16px; }
-    h1 { font-size: 2rem !important; font-weight: 700; margin-bottom: 0.1rem; }
-    .tagline { color: #555555; font-size: 1.05rem; margin-bottom: 1.5rem; }
+    html, body, [class*="css"] {
+        font-family: 'Inter', -apple-system, sans-serif;
+        font-size: 16px;
+    }
+    .stApp {
+        background: linear-gradient(180deg, #F7F8FD 0%, #FFFFFF 320px);
+    }
+    h1 {
+        font-size: 2.1rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, #4F46E5, #7C3AED);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.1rem !important;
+    }
+    .tagline { color: #5B5F73; font-size: 1.05rem; margin-bottom: 1.75rem; }
     p, li, label { font-size: 1rem; }
-    .stButton>button { font-size: 1rem; padding: 0.6rem 1.6rem; border-radius: 8px; font-weight: 600; }
-    .stTextArea textarea { font-size: 1rem; }
-    .result-card { border-left: 5px solid; border-radius: 6px; padding: 1rem 1.25rem; margin: 0.75rem 0; }
-    .result-label { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; }
-    .result-url { font-size: 0.9rem; color: #555555; word-break: break-all; margin-bottom: 0.5rem; }
-    .tab-uitleg { color: #444444; margin-bottom: 0.75rem; }
+
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 4px;
+        border-bottom: 1px solid #E4E6F1;
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: 44px;
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        color: #5B5F73;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #4F46E5 !important;
+        background-color: #EEF0FC;
+    }
+
+    .stButton>button {
+        font-size: 0.95rem;
+        padding: 0.6rem 1.8rem;
+        border-radius: 10px;
+        font-weight: 600;
+        background: linear-gradient(90deg, #4F46E5, #6D28D9);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .stButton>button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(79, 70, 229, 0.35);
+        color: white;
+    }
+
+    .stTextArea textarea {
+        font-size: 1rem;
+        border-radius: 10px !important;
+        border: 1.5px solid #E4E6F1 !important;
+    }
+    .stTextArea textarea:focus {
+        border-color: #4F46E5 !important;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
+    }
+
+    .result-card {
+        border-radius: 12px;
+        padding: 1.1rem 1.4rem;
+        margin: 0.9rem 0;
+        box-shadow: 0 2px 10px rgba(18, 20, 28, 0.06);
+        border: 1px solid rgba(18, 20, 28, 0.04);
+        position: relative;
+        overflow: hidden;
+    }
+    .result-card::before {
+        content: "";
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 5px;
+        background-color: var(--accent-color, #4F46E5);
+    }
+    .result-label {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .result-url {
+        font-size: 0.88rem;
+        color: #5B5F73;
+        word-break: break-all;
+        margin-bottom: 0.5rem;
+        font-family: 'SFMono-Regular', Consolas, monospace;
+    }
+    .tab-uitleg { color: #5B5F73; margin-bottom: 0.9rem; }
+
+    [data-testid="stSidebar"] {
+        background-color: #F7F8FD;
+        border-right: 1px solid #E4E6F1;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -77,8 +166,11 @@ def inject_css():
 def render_result(url, risk, reasons):
     style = RISK_STYLES[risk]
     st.markdown(f"""
-    <div class="result-card" style="border-color:{style['border']}; background-color:{style['bg']};">
-        <div class="result-label" style="color:{style['color']};">{style['label']}</div>
+    <div class="result-card" style="--accent-color:{style['border']}; background-color:{style['bg']};">
+        <div class="result-label" style="color:{style['color']};">
+            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:{style['border']};"></span>
+            {style['label']}
+        </div>
         <div class="result-url">{url}</div>
     </div>
     """, unsafe_allow_html=True)
