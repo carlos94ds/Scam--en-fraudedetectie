@@ -8,11 +8,12 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(os.path.dirname(__file__))
 
 import streamlit as st
 
 from src.feature_extraction import extract_urls_from_text
-from app.logic import load_resources, analyse_url
+from logic import load_resources, analyse_url
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 LOGO_PATH = os.path.join(os.path.dirname(__file__), "assets", "logo.png")
