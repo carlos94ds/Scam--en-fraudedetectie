@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Data (kan groot zijn, hoort niet standaard in git)
+data/*
+!data/.gitkeep
+
+# Modellen (binaire bestanden, apart beheren)
+models/*.pkl
+models/*.joblib
+
+# OS / editor
+.DS_Store
+.vscode/
