@@ -1,8 +1,8 @@
 """
-Webapplicatie: gebruiker plakt een link of een bericht (e-mail/sms), het
-systeem haalt de link(en) eruit en geeft per link een begrijpelijke
-risico-inschatting. Analyseert alleen de tekst van de link, bezoekt de
-website zelf niet. De logica zelf staat in app/logic.py (apart testbaar).
+VerdachtLink - hoofdpagina: gebruiker plakt een link, e-mail, sms of
+social-media-bericht, het systeem haalt de link(en) eruit en geeft per link
+een begrijpelijke risico-inschatting. Analyseert alleen de tekst van de
+link, bezoekt de website zelf niet. De logica staat in app/logic.py.
 """
 import sys
 import os
@@ -22,6 +22,33 @@ RISK_STYLES = {
     "hoog": {"color": "#B3261E", "bg": "#FBEEED", "border": "#B3261E", "label": "Hoog risico"},
 }
 
+TAB_CONFIG = [
+    {
+        "titel": "Link",
+        "uitleg": "Plak een kale link, bijvoorbeeld uit je browser of een bericht.",
+        "placeholder": "https://voorbeeld.nl/pagina",
+        "key": "link",
+    },
+    {
+        "titel": "E-mail",
+        "uitleg": "Plak de tekst van een verdachte e-mail. We halen de link(en) eruit en beoordelen die; de afzender en de rest van de tekst worden niet meegewogen.",
+        "placeholder": "Bijvoorbeeld: \"Uw account wordt geblokkeerd. Log direct in via ...\"",
+        "key": "email",
+    },
+    {
+        "titel": "Sms",
+        "uitleg": "Plak de tekst van een verdacht sms-bericht. We halen de link(en) eruit en beoordelen die.",
+        "placeholder": "Bijvoorbeeld: \"Uw pakket kon niet worden bezorgd. Bevestig via ...\"",
+        "key": "sms",
+    },
+    {
+        "titel": "Social media",
+        "uitleg": "Plak een bericht of link van Instagram, Facebook, WhatsApp of een ander platform.",
+        "placeholder": "Bijvoorbeeld een link uit een DM of een reactie onder een post.",
+        "key": "social",
+    },
+]
+
 
 @st.cache_resource
 def cached_resources():
@@ -32,13 +59,15 @@ def inject_css():
     st.markdown("""
     <style>
     html, body, [class*="css"] { font-size: 16px; }
-    h1 { font-size: 1.9rem !important; font-weight: 700; }
+    h1 { font-size: 2rem !important; font-weight: 700; margin-bottom: 0.1rem; }
+    .tagline { color: #555555; font-size: 1.05rem; margin-bottom: 1.5rem; }
     p, li, label { font-size: 1rem; }
     .stButton>button { font-size: 1rem; padding: 0.6rem 1.6rem; border-radius: 8px; font-weight: 600; }
     .stTextArea textarea { font-size: 1rem; }
     .result-card { border-left: 5px solid; border-radius: 6px; padding: 1rem 1.25rem; margin: 0.75rem 0; }
     .result-label { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; }
     .result-url { font-size: 0.9rem; color: #555555; word-break: break-all; margin-bottom: 0.5rem; }
+    .tab-uitleg { color: #444444; margin-bottom: 0.75rem; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -57,21 +86,18 @@ def render_result(url, risk, reasons):
             st.markdown(f"- {reason}")
 
 
-def main():
-    st.set_page_config(page_title="Linkchecker", page_icon=":mag:", layout="centered")
-    inject_css()
-
-    st.title("Linkchecker")
-    st.write("Twijfel je over een link uit een e-mail, sms of ander bericht? Plak de link, of het hele bericht, hieronder.")
+def render_checker_tab(config):
+    st.markdown(f'<div class="tab-uitleg">{config["uitleg"]}</div>', unsafe_allow_html=True)
 
     text = st.text_area(
-        "Link of bericht",
-        placeholder="Plak hier een link, of een e-mail-/sms-bericht met daarin een link.",
-        height=120,
+        f"invoer-{config['key']}",
+        placeholder=config["placeholder"],
+        height=110,
         label_visibility="collapsed",
+        key=f"input-{config['key']}",
     )
 
-    if st.button("Controleer"):
+    if st.button("Controleer", key=f"button-{config['key']}"):
         if not text.strip():
             st.warning("Vul eerst een link of bericht in.")
             return
@@ -82,19 +108,40 @@ def main():
             return
 
         model, scaler, tld_data, char_data = cached_resources()
-
         for url in urls:
             risk, reasons, _ = analyse_url(url, model, scaler, tld_data, char_data)
             render_result(url, risk, reasons)
 
-        with st.expander("Meer over deze inschatting"):
-            st.caption(
-                "Dit is een inschatting op basis van kenmerken van de link zelf, geen garantie. "
-                "De website wordt niet bezocht; alleen de tekst van de link wordt beoordeeld. "
-                "Voer nooit wachtwoorden, pincodes of andere gevoelige gegevens in op een "
-                "website waarover je twijfelt, en open een link bij twijfel liever niet — "
-                "controleer in plaats daarvan via een officiële app of website."
-            )
+
+def main():
+    st.set_page_config(page_title="VerdachtLink", page_icon=":shield:", layout="centered")
+    inject_css()
+
+    st.title("VerdachtLink")
+    st.markdown(
+        '<div class="tagline">Controleer snel of een link, e-mail, sms of social-mediabericht mogelijk onveilig is.</div>',
+        unsafe_allow_html=True,
+    )
+
+    tabs = st.tabs([c["titel"] for c in TAB_CONFIG])
+    for tab, config in zip(tabs, TAB_CONFIG):
+        with tab:
+            render_checker_tab(config)
+
+    with st.expander("Meer over deze inschatting"):
+        st.caption(
+            "Dit is een inschatting op basis van kenmerken van de link zelf, geen garantie. "
+            "De website wordt niet bezocht; alleen de tekst van de link wordt beoordeeld. "
+            "Voer nooit wachtwoorden, pincodes of andere gevoelige gegevens in op een "
+            "website waarover je twijfelt, en open een link bij twijfel liever niet — "
+            "controleer in plaats daarvan via een officiële app of website."
+        )
+
+    st.sidebar.markdown("### VerdachtLink")
+    st.sidebar.caption(
+        "Gebruik het menu hierboven om meer te lezen over deze app, "
+        "veelvoorkomende soorten fraude en algemene veiligheidstips."
+    )
 
 
 if __name__ == "__main__":
