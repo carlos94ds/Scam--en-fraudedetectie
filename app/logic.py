@@ -6,6 +6,8 @@ import os
 import json
 import joblib
 
+import pandas as pd
+
 from src.feature_extraction import extract_full_features
 from src.train_production_model import FEATURE_ORDER
 
@@ -78,7 +80,7 @@ def analyse_url(url, model, scaler, tld_data, char_data, feature_order=FEATURE_O
         default_tld_prob=tld_data["default"],
         default_char_prob=char_data["default"],
     )
-    X = [[features[name] for name in feature_order]]
+    X = pd.DataFrame([[features[name] for name in feature_order]], columns=feature_order)
     X_scaled = scaler.transform(X)
     proba = model.predict_proba(X_scaled)[0]
     p_phishing = proba[0]
