@@ -11,6 +11,9 @@ LABEL_COLUMN = "label"
 
 ID_COLUMNS = ["URL", "Domain"]  # identificatie, geen features om op te trainen
 
+# URLSimilarityIndex is bewust uitgesloten: zie docs/data-decisions.md
+# (datalekkage — de kolom herhaalt in de praktijk het label).
+
 # Kenmerken die je puur uit de URL-tekst zelf kan afleiden, zonder de website
 # te hoeven bezoeken. Dit is de scope van onze MVP.
 URL_ONLY_FEATURES = [
@@ -35,7 +38,6 @@ URL_ONLY_FEATURES = [
     "IsHTTPS",
     "CharContinuationRate",
     "URLCharProb",
-    "URLSimilarityIndex",
     "TLDLegitimateProb",
 ]
 

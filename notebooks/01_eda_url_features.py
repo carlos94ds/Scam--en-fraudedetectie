@@ -1,6 +1,7 @@
 """
 Eerste verkenning (EDA) van de PhiUSIIL-dataset, beperkt tot de URL-only
-kenmerken die bij onze MVP horen.
+kenmerken die bij onze MVP horen. URLSimilarityIndex is bewust uitgesloten,
+zie docs/data-decisions.md.
 """
 import sys
 import os
@@ -35,7 +36,7 @@ def main():
     plt.savefig(os.path.join(FIG_DIR, "class_balance.png"))
     plt.close()
 
-    # --- Ontbrekende waarden in de URL-only kolommen ---
+    # --- Ontbrekende waarden ---
     print("\n--- Ontbrekende waarden (URL-only kolommen) ---")
     missing = df[URL_ONLY_FEATURES].isnull().sum()
     missing = missing[missing > 0]
@@ -54,7 +55,7 @@ def main():
 
     plt.figure(figsize=(8, 10))
     correlaties.plot(kind="barh")
-    plt.title("Correlatie van URL-only kenmerken met label")
+    plt.title("Correlatie van URL-only kenmerken met label\n(URLSimilarityIndex uitgesloten, zie docs/data-decisions.md)")
     plt.tight_layout()
     plt.savefig(os.path.join(FIG_DIR, "correlation_with_label.png"))
     plt.close()
