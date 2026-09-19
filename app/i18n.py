@@ -43,11 +43,17 @@ UI_TEXT = {
         "warning_empty": "Vul eerst een link of bericht in.",
         "warning_no_url": "Er is geen link gevonden in de tekst. Controleer of de link volledig is geplakt.",
         "why_label": "**Waarom deze inschatting:**",
+        "website_checkbox_label": "Ook de website bezoeken voor een preciezere inschatting",
+        "website_checkbox_help": "Haalt de opgegeven pagina op en kijkt naar kenmerken zoals een wachtwoordveld, doorverwijzingen en of de titel bij het domein past. Duurt een paar seconden langer.",
+        "website_fetch_error": "De website kon niet (veilig) bezocht worden, dus is alleen de link zelf beoordeeld.",
+        "method_badge_url_only": "URL-only analyse",
+        "method_badge_url_website": "URL + website-analyse",
         "risk_labels": {"laag": "Laag risico", "mogelijk": "Mogelijk risico", "hoog": "Hoog risico"},
         "expander_title": "Meer over deze inschatting",
         "expander_text": (
             "Dit is een inschatting op basis van kenmerken van de link zelf, geen garantie. "
-            "De website wordt niet bezocht; alleen de tekst van de link wordt beoordeeld. "
+            "Standaard wordt de website zelf niet bezocht; alleen de tekst van de link wordt beoordeeld. "
+            "Optioneel kun je aanvinken dat de website ook echt bezocht wordt, voor een preciezere inschatting. "
             "Voer nooit wachtwoorden, pincodes of andere gevoelige gegevens in op een "
             "website waarover je twijfelt, en open een link bij twijfel liever niet — "
             "controleer in plaats daarvan via een officiële app of website."
@@ -86,11 +92,17 @@ UI_TEXT = {
         "warning_empty": "Please enter a link or message first.",
         "warning_no_url": "No link was found in the text. Check that the link was pasted in full.",
         "why_label": "**Why this assessment:**",
+        "website_checkbox_label": "Also visit the website for a more precise assessment",
+        "website_checkbox_help": "Fetches the given page and looks at features such as a password field, redirects, and whether the title matches the domain. Takes a few seconds longer.",
+        "website_fetch_error": "The website could not be visited (safely), so only the link itself was assessed.",
+        "method_badge_url_only": "URL-only analysis",
+        "method_badge_url_website": "URL + website analysis",
         "risk_labels": {"laag": "Low risk", "mogelijk": "Possible risk", "hoog": "High risk"},
         "expander_title": "More about this assessment",
         "expander_text": (
             "This is an estimate based on characteristics of the link itself, not a guarantee. "
-            "The website itself is not visited; only the text of the link is assessed. "
+            "By default the website itself is not visited; only the text of the link is assessed. "
+            "You can optionally tick a box to have the website actually visited, for a more precise assessment. "
             "Never enter passwords, PIN codes or other sensitive information on a "
             "website you're unsure about, and if in doubt, don't open a link — "
             "check via an official app or website instead."
@@ -129,11 +141,17 @@ UI_TEXT = {
         "warning_empty": "Veuillez d'abord saisir un lien ou un message.",
         "warning_no_url": "Aucun lien n'a été trouvé dans le texte. Vérifiez que le lien a été collé en entier.",
         "why_label": "**Pourquoi cette évaluation :**",
+        "website_checkbox_label": "Visiter aussi le site pour une évaluation plus précise",
+        "website_checkbox_help": "Récupère la page indiquée et examine des éléments tels qu'un champ de mot de passe, des redirections, et si le titre correspond au domaine. Prend quelques secondes de plus.",
+        "website_fetch_error": "Le site n'a pas pu être visité (en toute sécurité), seul le lien lui-même a donc été évalué.",
+        "method_badge_url_only": "Analyse URL uniquement",
+        "method_badge_url_website": "Analyse URL + site web",
         "risk_labels": {"laag": "Risque faible", "mogelijk": "Risque possible", "hoog": "Risque élevé"},
         "expander_title": "En savoir plus sur cette évaluation",
         "expander_text": (
             "Il s'agit d'une estimation basée sur les caractéristiques du lien lui-même, pas d'une garantie. "
-            "Le site web n'est pas visité ; seul le texte du lien est évalué. "
+            "Par défaut, le site web lui-même n'est pas visité ; seul le texte du lien est évalué. "
+            "Vous pouvez cocher une case pour que le site soit réellement visité, pour une évaluation plus précise. "
             "Ne saisissez jamais de mots de passe, codes PIN ou autres données sensibles sur un "
             "site dont vous n'êtes pas sûr, et en cas de doute, n'ouvrez pas le lien — "
             "vérifiez plutôt via une application ou un site officiel."
@@ -172,11 +190,17 @@ UI_TEXT = {
         "warning_empty": "Introduce primero un enlace o mensaje.",
         "warning_no_url": "No se ha encontrado ningún enlace en el texto. Comprueba que el enlace se haya pegado completo.",
         "why_label": "**Por qué esta valoración:**",
+        "website_checkbox_label": "Visitar también el sitio web para una valoración más precisa",
+        "website_checkbox_help": "Obtiene la página indicada y analiza aspectos como un campo de contraseña, redirecciones, y si el título coincide con el dominio. Tarda unos segundos más.",
+        "website_fetch_error": "No se pudo visitar el sitio web (de forma segura), así que solo se evaluó el enlace en sí.",
+        "method_badge_url_only": "Análisis solo de URL",
+        "method_badge_url_website": "Análisis de URL + sitio web",
         "risk_labels": {"laag": "Riesgo bajo", "mogelijk": "Riesgo posible", "hoog": "Riesgo alto"},
         "expander_title": "Más información sobre esta valoración",
         "expander_text": (
             "Esto es una estimación basada en características del propio enlace, no una garantía. "
-            "No se visita el sitio web; solo se evalúa el texto del enlace. "
+            "Por defecto no se visita el propio sitio web; solo se evalúa el texto del enlace. "
+            "Puedes marcar una casilla para que el sitio se visite de verdad, para una valoración más precisa. "
             "Nunca introduzcas contraseñas, PIN u otros datos sensibles en un "
             "sitio del que dudes, y si tienes dudas, mejor no abras el enlace — "
             "compruébalo mejor a través de una app o sitio web oficial."
@@ -215,11 +239,17 @@ UI_TEXT = {
         "warning_empty": "Gib zuerst einen Link oder eine Nachricht ein.",
         "warning_no_url": "Im Text wurde kein Link gefunden. Prüfe, ob der Link vollständig eingefügt wurde.",
         "why_label": "**Warum diese Einschätzung:**",
+        "website_checkbox_label": "Auch die Website besuchen für eine genauere Einschätzung",
+        "website_checkbox_help": "Ruft die angegebene Seite ab und prüft Merkmale wie ein Passwortfeld, Weiterleitungen und ob der Titel zur Domain passt. Dauert ein paar Sekunden länger.",
+        "website_fetch_error": "Die Website konnte nicht (sicher) besucht werden, daher wurde nur der Link selbst bewertet.",
+        "method_badge_url_only": "Nur-URL-Analyse",
+        "method_badge_url_website": "URL + Website-Analyse",
         "risk_labels": {"laag": "Geringes Risiko", "mogelijk": "Mögliches Risiko", "hoog": "Hohes Risiko"},
         "expander_title": "Mehr über diese Einschätzung",
         "expander_text": (
             "Dies ist eine Einschätzung anhand von Merkmalen des Links selbst, keine Garantie. "
-            "Die Website wird nicht besucht; es wird nur der Text des Links bewertet. "
+            "Standardmäßig wird die Website selbst nicht besucht; es wird nur der Text des Links bewertet. "
+            "Optional kannst du ein Kästchen ankreuzen, damit die Website tatsächlich besucht wird, für eine genauere Einschätzung. "
             "Gib niemals Passwörter, PINs oder andere sensible Daten auf einer "
             "Website ein, bei der du unsicher bist, und öffne im Zweifel lieber keinen Link — "
             "prüfe stattdessen über eine offizielle App oder Website."
@@ -258,11 +288,17 @@ UI_TEXT = {
         "warning_empty": "Introduza primeiro um link ou mensagem.",
         "warning_no_url": "Não foi encontrado nenhum link no texto. Verifique se o link foi colado por completo.",
         "why_label": "**Porquê esta avaliação:**",
+        "website_checkbox_label": "Visitar também o site para uma avaliação mais precisa",
+        "website_checkbox_help": "Obtém a página indicada e analisa características como um campo de palavra-passe, redirecionamentos, e se o título corresponde ao domínio. Demora mais alguns segundos.",
+        "website_fetch_error": "Não foi possível visitar o site (com segurança), por isso apenas o link em si foi avaliado.",
+        "method_badge_url_only": "Análise apenas do URL",
+        "method_badge_url_website": "Análise de URL + site",
         "risk_labels": {"laag": "Risco baixo", "mogelijk": "Risco possível", "hoog": "Risco elevado"},
         "expander_title": "Mais sobre esta avaliação",
         "expander_text": (
             "Esta é uma estimativa baseada em características do próprio link, não é uma garantia. "
-            "O website não é visitado; apenas o texto do link é avaliado. "
+            "Por predefinição, o próprio site não é visitado; apenas o texto do link é avaliado. "
+            "Pode assinalar uma opção para que o site seja mesmo visitado, para uma avaliação mais precisa. "
             "Nunca introduza palavras-passe, PINs ou outros dados sensíveis num "
             "site sobre o qual tenha dúvidas, e em caso de dúvida, não abra o link — "
             "verifique antes através de uma app ou site oficial."
@@ -301,11 +337,17 @@ UI_TEXT = {
         "warning_empty": "Inserisci prima un link o un messaggio.",
         "warning_no_url": "Non è stato trovato alcun link nel testo. Controlla che il link sia stato incollato per intero.",
         "why_label": "**Perché questa valutazione:**",
+        "website_checkbox_label": "Visita anche il sito web per una valutazione più precisa",
+        "website_checkbox_help": "Recupera la pagina indicata e analizza caratteristiche come un campo password, reindirizzamenti, e se il titolo corrisponde al dominio. Richiede qualche secondo in più.",
+        "website_fetch_error": "Non è stato possibile visitare il sito web (in modo sicuro), quindi è stato valutato solo il link stesso.",
+        "method_badge_url_only": "Analisi solo URL",
+        "method_badge_url_website": "Analisi URL + sito web",
         "risk_labels": {"laag": "Rischio basso", "mogelijk": "Rischio possibile", "hoog": "Rischio alto"},
         "expander_title": "Maggiori informazioni su questa valutazione",
         "expander_text": (
             "Questa è una stima basata sulle caratteristiche del link stesso, non una garanzia. "
-            "Il sito web non viene visitato; viene valutato solo il testo del link. "
+            "Per impostazione predefinita il sito web non viene visitato; viene valutato solo il testo del link. "
+            "Puoi selezionare una casella per far visitare davvero il sito, per una valutazione più precisa. "
             "Non inserire mai password, PIN o altri dati sensibili su un "
             "sito di cui non sei sicuro e, in caso di dubbio, evita di aprire il link — "
             "verifica invece tramite un'app o un sito ufficiale."
@@ -366,8 +408,9 @@ een risico-inschatting: laag, mogelijk of hoog.
 
 ### Wat deze applicatie niet doet
 
-- De opgegeven website wordt niet bezocht. Er wordt alleen naar de tekst
-  van de link gekeken.
+- De opgegeven website wordt standaard niet bezocht. Er wordt alleen naar de
+  tekst van de link gekeken. Optioneel kun je aanvinken dat de website ook
+  echt bezocht wordt, voor een preciezere inschatting.
 - Bij e-mail, sms en social media wordt alleen de link in het bericht
   beoordeeld, niet de afzender of de rest van de inhoud.
 - De inschatting is geen garantie. Een link met een lage risico-score kan
@@ -405,8 +448,9 @@ system gives a risk assessment: low, possible or high.
 
 ### What this application does not do
 
-- The website itself is not visited. Only the text of the link is
-  examined.
+- By default, the website itself is not visited. Only the text of the
+  link is examined. You can optionally tick a box to have the website
+  actually visited, for a more precise assessment.
 - For email, text messages and social media, only the link in the
   message is assessed, not the sender or the rest of the content.
 - The assessment is not a guarantee. A link with a low risk score can, in
@@ -447,8 +491,9 @@ possible ou élevé.
 
 ### Ce que cette application ne fait pas
 
-- Le site web indiqué n'est pas visité. Seul le texte du lien est
-  examiné.
+- Par défaut, le site web indiqué n'est pas visité. Seul le texte du lien
+  est examiné. Vous pouvez cocher une case pour que le site soit
+  réellement visité, pour une évaluation plus précise.
 - Pour les e-mails, SMS et réseaux sociaux, seul le lien contenu dans le
   message est évalué, pas l'expéditeur ni le reste du contenu.
 - L'évaluation n'est pas une garantie. Un lien avec un score de risque
@@ -488,8 +533,9 @@ ello, el sistema da una valoración del riesgo: bajo, posible o alto.
 
 ### Lo que esta aplicación no hace
 
-- No se visita el sitio web indicado. Solo se examina el texto del
-  enlace.
+- Por defecto no se visita el sitio web indicado. Solo se examina el texto
+  del enlace. Puedes marcar una casilla para que el sitio se visite de
+  verdad, para una valoración más precisa.
 - En correos, SMS y redes sociales, solo se evalúa el enlace del mensaje,
   no el remitente ni el resto del contenido.
 - La valoración no es una garantía. Un enlace con una puntuación de
@@ -530,8 +576,10 @@ System eine Risikoeinschätzung ab: gering, möglich oder hoch.
 
 ### Was diese Anwendung nicht tut
 
-- Die angegebene Website wird nicht besucht. Es wird nur der Text des
-  Links betrachtet.
+- Standardmäßig wird die angegebene Website nicht besucht. Es wird nur der
+  Text des Links betrachtet. Optional kannst du ein Kästchen ankreuzen,
+  damit die Website tatsächlich besucht wird, für eine genauere
+  Einschätzung.
 - Bei E-Mail, SMS und Social Media wird nur der Link in der Nachricht
   bewertet, nicht der Absender oder der übrige Inhalt.
 - Die Einschätzung ist keine Garantie. Ein Link mit niedrigem
@@ -572,8 +620,9 @@ elevado.
 
 ### O que esta aplicação não faz
 
-- O website indicado não é visitado. Apenas o texto do link é
-  examinado.
+- Por predefinição, o site indicado não é visitado. Apenas o texto do link
+  é examinado. Pode assinalar uma opção para que o site seja mesmo
+  visitado, para uma avaliação mais precisa.
 - Em e-mail, SMS e redes sociais, apenas o link na mensagem é avaliado,
   não o remetente nem o resto do conteúdo.
 - A avaliação não é uma garantia. Um link com uma pontuação de risco
@@ -614,8 +663,9 @@ basso, possibile o alto.
 
 ### Cosa non fa questa applicazione
 
-- Il sito web indicato non viene visitato. Viene esaminato solo il testo
-  del link.
+- Per impostazione predefinita il sito indicato non viene visitato. Viene
+  esaminato solo il testo del link. Puoi selezionare una casella per far
+  visitare davvero il sito, per una valutazione più precisa.
 - Per email, SMS e social media, viene valutato solo il link nel
   messaggio, non il mittente né il resto del contenuto.
 - La valutazione non è una garanzia. Un link con un punteggio di rischio

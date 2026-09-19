@@ -3,6 +3,7 @@ numpy
 scikit-learn
 matplotlib
 requests
+beautifulsoup4
 streamlit
 ucimlrepo
 pytest

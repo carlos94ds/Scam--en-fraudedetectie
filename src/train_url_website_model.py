@@ -2,13 +2,16 @@
 Vervolg op de baseline: Logistic Regression op URL-only + website-kenmerken
 samen, om te vergelijken met het URL-only baseline-resultaat.
 
-Belangrijk: deze website-kenmerken komen hier uit de dataset zelf (al eerder
-door de dataset-makers berekend). Zodra we dit in onze eigen webapplicatie
-gebruiken, moeten we deze kenmerken zelf live berekenen door de opgegeven
-website te bezoeken.
+De website-kenmerken komen hier uit de dataset zelf (al eerder door de
+dataset-makers berekend). In de webapplicatie berekent src/website_features.py
+dezelfde soort kenmerken live, door de opgegeven website te bezoeken; de
+TLD- en Robots-categorieën die hier tijdens trainen zijn gebruikt, worden
+daarom ook opgeslagen (url_website_vocab.json), zodat live-inferentie exact
+dezelfde one-hot-kolommen reconstrueert als tijdens trainen.
 """
 import sys
 import os
+import json
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -34,7 +37,13 @@ RANDOM_STATE = 42
 
 
 def build_features(df, feature_list):
+    """Retourneert (X, vocab) waarbij vocab de categorieën vastlegt die voor
+    TLD en Robots zijn gebruikt (top-20 TLD's + "overig", en alle geziene
+    Robots-waarden). Die vocab wordt apart opgeslagen zodat live-inferentie
+    in de webapp (src/website_features.py) precies dezelfde one-hot-kolommen
+    kan reconstrueren voor een nieuwe, niet eerder geziene URL."""
     X = df[feature_list].copy()
+    vocab = {"tld": [], "robots": []}
 
     # Title is vrije tekst (de titel van de webpagina) - geen bruikbaar
     # numeriek/categorisch kenmerk zonder aparte tekstverwerking (NLP).
@@ -46,15 +55,17 @@ def build_features(df, feature_list):
 
     if "TLD" in X.columns:
         top_tlds = X["TLD"].value_counts().nlargest(20).index
+        vocab["tld"] = list(top_tlds)
         X["TLD"] = X["TLD"].where(X["TLD"].isin(top_tlds), other="overig")
         X = pd.get_dummies(X, columns=["TLD"], prefix="TLD")
 
     # Robots is ook tekstueel/categorisch van aard in deze dataset - one-hot
     # encoderen net als TLD.
     if "Robots" in X.columns and X["Robots"].dtype == object:
+        vocab["robots"] = sorted(X["Robots"].dropna().unique().tolist())
         X = pd.get_dummies(X, columns=["Robots"], prefix="Robots")
 
-    return X
+    return X, vocab
 
 
 def evaluate(name, X, y):
@@ -101,12 +112,12 @@ def main():
     y = df[LABEL_COLUMN]
 
     # --- Model A: alleen URL (ter vergelijking, nu met dezelfde CV-toevoeging) ---
-    X_url_only = build_features(df, URL_ONLY_FEATURES)
+    X_url_only, _ = build_features(df, URL_ONLY_FEATURES)
     _, _, _, acc_url, f1_url = evaluate("Model A: URL-only (baseline)", X_url_only, y)
 
     # --- Model B: URL + website-kenmerken samen ---
     combined_features = URL_ONLY_FEATURES + WEBSITE_FEATURES
-    X_combined = build_features(df, combined_features)
+    X_combined, vocab = build_features(df, combined_features)
     model_b, scaler_b, columns_b, acc_combined, f1_combined = evaluate(
         "Model B: URL + website-kenmerken", X_combined, y
     )
@@ -122,7 +133,9 @@ def main():
     joblib.dump(model_b, os.path.join(MODEL_DIR, "url_website_logreg.pkl"))
     joblib.dump(scaler_b, os.path.join(MODEL_DIR, "url_website_scaler.pkl"))
     joblib.dump(list(columns_b), os.path.join(MODEL_DIR, "url_website_feature_columns.pkl"))
-    print(f"\nModel B en scaler opgeslagen in: {MODEL_DIR}")
+    with open(os.path.join(MODEL_DIR, "url_website_vocab.json"), "w") as f:
+        json.dump(vocab, f, indent=2)
+    print(f"\nModel B, scaler en vocab (TLD/Robots-categorieën) opgeslagen in: {MODEL_DIR}")
 
 
 if __name__ == "__main__":

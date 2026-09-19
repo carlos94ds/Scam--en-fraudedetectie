@@ -13,7 +13,14 @@ sys.path.append(os.path.dirname(__file__))
 import streamlit as st
 
 from src.feature_extraction import extract_urls_from_text
-from logic import load_resources, analyse_url
+from src.website_features import WebsiteFetchError
+from logic import (
+    load_resources,
+    analyse_url,
+    analyse_url_and_website,
+    website_resources_available,
+    load_website_resources,
+)
 from i18n import LANGUAGES, UI_TEXT
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
@@ -31,6 +38,11 @@ TAB_KEYS = ["link", "email", "sms", "social"]
 @st.cache_resource
 def cached_resources():
     return load_resources(MODEL_DIR)
+
+
+@st.cache_resource
+def cached_website_resources():
+    return load_website_resources(MODEL_DIR)
 
 
 def inject_css():
@@ -55,6 +67,7 @@ p, li, label { font-size: 1rem; }
 .result-card { border-radius: 12px; padding: 1.1rem 1.4rem; margin: 0.9rem 0; box-shadow: 0 2px 10px rgba(18, 20, 28, 0.06); border: 1px solid rgba(18, 20, 28, 0.04); position: relative; overflow: hidden; }
 .result-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background-color: var(--accent-color, #4F46E5); }
 .result-label { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
+.method-badge { margin-left: auto; font-size: 0.72rem; font-weight: 600; color: #5B5F73; background-color: rgba(18, 20, 28, 0.05); border-radius: 999px; padding: 0.2rem 0.65rem; letter-spacing: 0.01em; }
 .result-url { font-size: 0.88rem; color: #5B5F73; word-break: break-all; margin-bottom: 0.5rem; font-family: 'SFMono-Regular', Consolas, monospace; }
 .tab-uitleg { color: #5B5F73; margin-bottom: 0.9rem; }
 [data-testid="stSidebar"] { background-color: #F7F8FD; border-right: 1px solid #E4E6F1; }
@@ -63,14 +76,16 @@ p, li, label { font-size: 1rem; }
     st.markdown(css, unsafe_allow_html=True)
 
 
-def render_result(url, risk, reasons, text):
+def render_result(url, risk, reasons, text, used_website=False):
     style = RISK_STYLES[risk]
     label = text["risk_labels"][risk]
+    method_label = text["method_badge_url_website"] if used_website else text["method_badge_url_only"]
     st.markdown(f"""
     <div class="result-card" style="--accent-color:{style['border']}; background-color:{style['bg']};">
         <div class="result-label" style="color:{style['color']};">
             <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:{style['border']};"></span>
             {label}
+            <span class="method-badge">{method_label}</span>
         </div>
         <div class="result-url">{url}</div>
     </div>
@@ -92,6 +107,14 @@ def render_checker_tab(tab_config, tab_key, lang, text):
         key=f"input-{tab_key}",
     )
 
+    visit_website = False
+    if website_resources_available(MODEL_DIR):
+        visit_website = st.checkbox(
+            text["website_checkbox_label"],
+            help=text["website_checkbox_help"],
+            key=f"visit-website-{tab_key}",
+        )
+
     if st.button(text["button"], key=f"button-{tab_key}"):
         if not input_text.strip():
             st.warning(text["warning_empty"])
@@ -103,9 +126,22 @@ def render_checker_tab(tab_config, tab_key, lang, text):
             return
 
         model, scaler, tld_data, char_data = cached_resources()
+
         for url in urls:
+            if visit_website:
+                try:
+                    model_b, scaler_b, feature_columns_b, vocab = cached_website_resources()
+                    risk, reasons, _ = analyse_url_and_website(
+                        url, model_b, scaler_b, feature_columns_b, vocab,
+                        tld_data, char_data, lang=lang,
+                    )
+                    render_result(url, risk, reasons, text, used_website=True)
+                    continue
+                except WebsiteFetchError:
+                    st.warning(text["website_fetch_error"])
+
             risk, reasons, _ = analyse_url(url, model, scaler, tld_data, char_data, lang=lang)
-            render_result(url, risk, reasons, text)
+            render_result(url, risk, reasons, text, used_website=False)
 
 
 def main():
