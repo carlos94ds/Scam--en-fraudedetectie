@@ -8,9 +8,10 @@ venv/
 data/*
 !data/.gitkeep
 
-# Modellen (binaire bestanden, apart beheren)
-models/*.pkl
-models/*.joblib
+# Modellen: bewust WEL in git (in tegenstelling tot data/). Streamlit
+# Community Cloud kloont alleen deze repo en heeft geen toegang tot de
+# dataset, dus de getrainde modellen moeten meekomen om te kunnen
+# deployen. Zie docs/deployment.md.
 
 # OS / editor
 .DS_Store

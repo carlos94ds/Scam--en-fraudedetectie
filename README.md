@@ -18,3 +18,16 @@ Project in opbouw. Zie `docs/` voor het projectverslag.
 - `app/` — de webapplicatie (Streamlit)
 - `tests/` — tests
 - `docs/` — projectdocumentatie
+
+## Draaien
+
+```bash
+pip install -r requirements.txt
+streamlit run app/app.py
+```
+
+## Deployment
+
+De app draait live op Streamlit Community Cloud — zie
+[`docs/deployment.md`](docs/deployment.md) voor hoe dat is opgezet en hoe
+je 'm bijwerkt.
