@@ -14,42 +14,18 @@ import streamlit as st
 
 from src.feature_extraction import extract_urls_from_text
 from logic import load_resources, analyse_url
+from i18n import LANGUAGES, UI_TEXT
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 LOGO_PATH = os.path.join(os.path.dirname(__file__), "assets", "logo.png")
 
 RISK_STYLES = {
-    "laag": {"color": "#1E7D32", "bg": "#F0F7F1", "border": "#1E7D32", "label": "Laag risico"},
-    "mogelijk": {"color": "#9A5B00", "bg": "#FBF4EA", "border": "#9A5B00", "label": "Mogelijk risico"},
-    "hoog": {"color": "#B3261E", "bg": "#FBEEED", "border": "#B3261E", "label": "Hoog risico"},
+    "laag": {"color": "#1E7D32", "bg": "#F0F7F1", "border": "#1E7D32"},
+    "mogelijk": {"color": "#9A5B00", "bg": "#FBF4EA", "border": "#9A5B00"},
+    "hoog": {"color": "#B3261E", "bg": "#FBEEED", "border": "#B3261E"},
 }
 
-TAB_CONFIG = [
-    {
-        "titel": "Link",
-        "uitleg": "Plak een kale link, bijvoorbeeld uit je browser of een bericht.",
-        "placeholder": "https://voorbeeld.nl/pagina",
-        "key": "link",
-    },
-    {
-        "titel": "E-mail",
-        "uitleg": "Plak de tekst van een verdachte e-mail. We halen de link(en) eruit en beoordelen die; de afzender en de rest van de tekst worden niet meegewogen.",
-        "placeholder": "Bijvoorbeeld: \"Uw account wordt geblokkeerd. Log direct in via ...\"",
-        "key": "email",
-    },
-    {
-        "titel": "Sms",
-        "uitleg": "Plak de tekst van een verdacht sms-bericht. We halen de link(en) eruit en beoordelen die.",
-        "placeholder": "Bijvoorbeeld: \"Uw pakket kon niet worden bezorgd. Bevestig via ...\"",
-        "key": "sms",
-    },
-    {
-        "titel": "Social media",
-        "uitleg": "Plak een bericht of link van Instagram, Facebook, WhatsApp of een ander platform.",
-        "placeholder": "Bijvoorbeeld een link uit een DM of een reactie onder een post.",
-        "key": "social",
-    },
-]
+TAB_KEYS = ["link", "email", "sms", "social"]
 
 
 @st.cache_resource
@@ -87,84 +63,93 @@ p, li, label { font-size: 1rem; }
     st.markdown(css, unsafe_allow_html=True)
 
 
-def render_result(url, risk, reasons):
+def render_result(url, risk, reasons, text):
     style = RISK_STYLES[risk]
+    label = text["risk_labels"][risk]
     st.markdown(f"""
     <div class="result-card" style="--accent-color:{style['border']}; background-color:{style['bg']};">
         <div class="result-label" style="color:{style['color']};">
             <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:{style['border']};"></span>
-            {style['label']}
+            {label}
         </div>
         <div class="result-url">{url}</div>
     </div>
     """, unsafe_allow_html=True)
     if reasons:
-        st.markdown("**Waarom deze inschatting:**")
+        st.markdown(text["why_label"])
         for reason in reasons:
             st.markdown(f"- {reason}")
 
 
-def render_checker_tab(config):
-    st.markdown(f'<div class="tab-uitleg">{config["uitleg"]}</div>', unsafe_allow_html=True)
+def render_checker_tab(tab_config, tab_key, lang, text):
+    st.markdown(f'<div class="tab-uitleg">{tab_config["uitleg"]}</div>', unsafe_allow_html=True)
 
-    text = st.text_area(
-        f"invoer-{config['key']}",
-        placeholder=config["placeholder"],
+    input_text = st.text_area(
+        f"invoer-{tab_key}",
+        placeholder=tab_config["placeholder"],
         height=110,
         label_visibility="collapsed",
-        key=f"input-{config['key']}",
+        key=f"input-{tab_key}",
     )
 
-    if st.button("Controleer", key=f"button-{config['key']}"):
-        if not text.strip():
-            st.warning("Vul eerst een link of bericht in.")
+    if st.button(text["button"], key=f"button-{tab_key}"):
+        if not input_text.strip():
+            st.warning(text["warning_empty"])
             return
 
-        urls = extract_urls_from_text(text)
+        urls = extract_urls_from_text(input_text)
         if not urls:
-            st.warning("Er is geen link gevonden in de tekst. Controleer of de link volledig is geplakt.")
+            st.warning(text["warning_no_url"])
             return
 
         model, scaler, tld_data, char_data = cached_resources()
         for url in urls:
-            risk, reasons, _ = analyse_url(url, model, scaler, tld_data, char_data)
-            render_result(url, risk, reasons)
+            risk, reasons, _ = analyse_url(url, model, scaler, tld_data, char_data, lang=lang)
+            render_result(url, risk, reasons, text)
 
 
 def main():
     st.set_page_config(page_title="VerdachtLink", page_icon=LOGO_PATH, layout="centered")
     inject_css()
 
-    col_logo, col_title = st.columns([1, 6])
+    if "lang" not in st.session_state:
+        st.session_state["lang"] = "nl"
+
+    col_logo, col_title, col_lang = st.columns([1, 5, 2])
     with col_logo:
         st.image(LOGO_PATH, width=64)
     with col_title:
         st.title("VerdachtLink")
+    with col_lang:
+        lang_codes = list(LANGUAGES.keys())
+        selected = st.selectbox(
+            UI_TEXT[st.session_state["lang"]]["lang_label"],
+            options=lang_codes,
+            format_func=lambda code: LANGUAGES[code],
+            index=lang_codes.index(st.session_state["lang"]),
+            key="lang_select",
+        )
+        st.session_state["lang"] = selected
+
+    lang = st.session_state["lang"]
+    text = UI_TEXT[lang]
+
     st.markdown(
-        '<div class="tagline">Controleer snel of een link, e-mail, sms of social-mediabericht mogelijk onveilig is.</div>',
+        f'<div class="tagline">{text["tagline"]}</div>',
         unsafe_allow_html=True,
     )
 
-    tabs = st.tabs([c["titel"] for c in TAB_CONFIG])
-    for tab, config in zip(tabs, TAB_CONFIG):
+    tabs = st.tabs([tab["titel"] for tab in text["tabs"]])
+    for tab, tab_key, tab_config in zip(tabs, TAB_KEYS, text["tabs"]):
         with tab:
-            render_checker_tab(config)
+            render_checker_tab(tab_config, tab_key, lang, text)
 
-    with st.expander("Meer over deze inschatting"):
-        st.caption(
-            "Dit is een inschatting op basis van kenmerken van de link zelf, geen garantie. "
-            "De website wordt niet bezocht; alleen de tekst van de link wordt beoordeeld. "
-            "Voer nooit wachtwoorden, pincodes of andere gevoelige gegevens in op een "
-            "website waarover je twijfelt, en open een link bij twijfel liever niet — "
-            "controleer in plaats daarvan via een officiële app of website."
-        )
+    with st.expander(text["expander_title"]):
+        st.caption(text["expander_text"])
 
     st.sidebar.image(LOGO_PATH, width=56)
     st.sidebar.markdown("### VerdachtLink")
-    st.sidebar.caption(
-        "Gebruik het menu hierboven om meer te lezen over deze app, "
-        "veelvoorkomende soorten fraude en algemene veiligheidstips."
-    )
+    st.sidebar.caption(text["sidebar_caption"])
 
 
 if __name__ == "__main__":
