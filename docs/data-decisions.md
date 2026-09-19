@@ -38,3 +38,21 @@ model phishing in de praktijk herkent". Bij een eventuele latere test op
 URL's uit een andere bron (bijvoorbeeld handmatig verzamelde voorbeelden)
 verwachten we een lagere score, en dat is dan een eerlijker beeld van de
 werkelijke prestatie.
+
+## MVP-scope bevestigd: URL-only (19 september 2026)
+
+Model B (URL + website-kenmerken) haalt 99,94% accuracy tegenover 99,68%
+voor Model A (URL-only): een verschil van +0,26 procentpunt. Dat is te
+klein om de extra complexiteit en risico's van live website-analyse
+(langzamer, foutgevoeliger, SSRF-risico bij het zelf bezoeken van
+opgegeven sites) te rechtvaardigen voor de eerste versie.
+
+Besluit: de MVP-applicatie gebruikt het URL-only model (Model A). De
+website-uitbreiding (Model B) blijft een onderbouwde, beargumenteerde
+vervolgstap voor een latere fase, zoals beschreven in het projectverslag
+(URL → Website → E-mail → SMS → Social).
+
+Kanttekening: bij Model B verschijnen NoOfSelfRef, NoOfExternalRef,
+NoOfJS, NoOfImage en HasSocialNet in de top-10 belangrijkste kenmerken.
+Dit bevestigt dat paginastructuur wel degelijk aanvullend signaal geeft,
+ook al is de winst in deze dataset beperkt.
