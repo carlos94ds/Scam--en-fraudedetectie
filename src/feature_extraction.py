@@ -104,3 +104,22 @@ def extract_full_features(url: str, tld_prob_table: dict, char_freq_table: dict,
         features["TLD"], tld_prob_table, default_tld_prob
     )
     return features
+
+
+def extract_urls_from_text(text: str) -> list:
+    """Haalt links uit een stuk vrije tekst (bijv. een geplakt e-mail- of
+    sms-bericht), zodat de gebruiker niet zelf de link hoeft te knippen."""
+    import re
+    pattern = re.compile(
+        r"(?:https?://)?(?:www\.)?[a-zA-Z0-9][a-zA-Z0-9-]*\.[a-zA-Z]{2,}(?:/[^\s]*)?"
+    )
+    found = pattern.findall(text)
+    # volgorde bewaren, duplicaten (ongeacht hoofdletters) eruit
+    seen = set()
+    unique = []
+    for url in found:
+        key = url.lower().rstrip(".,;:!?)")
+        if key not in seen:
+            seen.add(key)
+            unique.append(url.rstrip(".,;:!?)"))
+    return unique[:5]
