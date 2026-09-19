@@ -1,6 +1,9 @@
+import os
 import streamlit as st
 
-st.set_page_config(page_title="Soorten fraude", page_icon=":warning:", layout="centered")
+LOGO_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "logo.png")
+
+st.set_page_config(page_title="Soorten fraude", page_icon=LOGO_PATH, layout="centered")
 
 st.title("Veelvoorkomende soorten fraude en scams")
 

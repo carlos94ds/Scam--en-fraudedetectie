@@ -1,6 +1,9 @@
+import os
 import streamlit as st
 
-st.set_page_config(page_title="Over VerdachtLink", page_icon=":information_source:", layout="centered")
+LOGO_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "logo.png")
+
+st.set_page_config(page_title="Over VerdachtLink", page_icon=LOGO_PATH, layout="centered")
 
 st.title("Over VerdachtLink")
 

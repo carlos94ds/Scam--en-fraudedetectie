@@ -15,6 +15,7 @@ from src.feature_extraction import extract_urls_from_text
 from app.logic import load_resources, analyse_url
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
+LOGO_PATH = os.path.join(os.path.dirname(__file__), "assets", "logo.png")
 
 RISK_STYLES = {
     "laag": {"color": "#1E7D32", "bg": "#F0F7F1", "border": "#1E7D32", "label": "Laag risico"},
@@ -114,10 +115,14 @@ def render_checker_tab(config):
 
 
 def main():
-    st.set_page_config(page_title="VerdachtLink", page_icon=":shield:", layout="centered")
+    st.set_page_config(page_title="VerdachtLink", page_icon=LOGO_PATH, layout="centered")
     inject_css()
 
-    st.title("VerdachtLink")
+    col_logo, col_title = st.columns([1, 6])
+    with col_logo:
+        st.image(LOGO_PATH, width=64)
+    with col_title:
+        st.title("VerdachtLink")
     st.markdown(
         '<div class="tagline">Controleer snel of een link, e-mail, sms of social-mediabericht mogelijk onveilig is.</div>',
         unsafe_allow_html=True,
@@ -137,6 +142,7 @@ def main():
             "controleer in plaats daarvan via een officiële app of website."
         )
 
+    st.sidebar.image(LOGO_PATH, width=56)
     st.sidebar.markdown("### VerdachtLink")
     st.sidebar.caption(
         "Gebruik het menu hierboven om meer te lezen over deze app, "
