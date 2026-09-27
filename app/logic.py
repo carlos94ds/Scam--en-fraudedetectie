@@ -8,9 +8,20 @@ import joblib
 
 import pandas as pd
 
-from src.feature_extraction import extract_full_features
+from src.feature_extraction import extract_full_features, get_domain
 from src.train_production_model import FEATURE_ORDER
 from src.website_features import fetch_website, compute_website_features, encode_for_model_b, WebsiteFetchError
+from src.trusted_domains import is_trusted_domain
+
+TRUSTED_DOMAIN_REASON = {
+    "nl": "Dit is een bekend, betrouwbaar domein.",
+    "en": "This is a known, trusted domain.",
+    "fr": "Il s'agit d'un domaine connu et fiable.",
+    "es": "Este es un dominio conocido y de confianza.",
+    "de": "Dies ist eine bekannte, vertrauenswürdige Domain.",
+    "pt": "Este é um domínio conhecido e de confiança.",
+    "it": "Questo è un dominio noto e affidabile.",
+}
 
 FEATURE_EXPLANATIONS = {
     "nl": {
@@ -418,7 +429,77 @@ def classify_risk(p_phishing: float) -> str:
     return "hoog"
 
 
-def explain(model, feature_values_scaled, feature_names, lang="nl", top_n=3):
+# Kenmerken die een concreet aantal tellen: de uitleg krijgt de gemeten
+# waarde erbij (bijv. "ongewoon lang (87 tekens)") in plaats van alleen een
+# kwalitatieve omschrijving.
+COUNT_UNIT_LABELS = {
+    "nl": {
+        "URLLength": "tekens", "DomainLength": "tekens", "TLDLength": "tekens",
+        "NoOfSubDomain": "subdomeinen", "NoOfObfuscatedChar": "gecodeerde tekens",
+        "NoOfLettersInURL": "letters", "NoOfDegitsInURL": "cijfers",
+        "NoOfEqualsInURL": '"="-tekens', "NoOfQMarkInURL": "vraagtekens",
+        "NoOfAmpersandInURL": '"&"-tekens', "NoOfOtherSpecialCharsInURL": "ongewone tekens",
+    },
+    "en": {
+        "URLLength": "characters", "DomainLength": "characters", "TLDLength": "characters",
+        "NoOfSubDomain": "subdomains", "NoOfObfuscatedChar": "encoded characters",
+        "NoOfLettersInURL": "letters", "NoOfDegitsInURL": "digits",
+        "NoOfEqualsInURL": '"=" characters', "NoOfQMarkInURL": "question marks",
+        "NoOfAmpersandInURL": '"&" characters', "NoOfOtherSpecialCharsInURL": "unusual characters",
+    },
+    "fr": {
+        "URLLength": "caractères", "DomainLength": "caractères", "TLDLength": "caractères",
+        "NoOfSubDomain": "sous-domaines", "NoOfObfuscatedChar": "caractères codés",
+        "NoOfLettersInURL": "lettres", "NoOfDegitsInURL": "chiffres",
+        "NoOfEqualsInURL": 'signes "="', "NoOfQMarkInURL": "points d'interrogation",
+        "NoOfAmpersandInURL": 'caractères "&"', "NoOfOtherSpecialCharsInURL": "caractères inhabituels",
+    },
+    "es": {
+        "URLLength": "caracteres", "DomainLength": "caracteres", "TLDLength": "caracteres",
+        "NoOfSubDomain": "subdominios", "NoOfObfuscatedChar": "caracteres codificados",
+        "NoOfLettersInURL": "letras", "NoOfDegitsInURL": "dígitos",
+        "NoOfEqualsInURL": 'signos "="', "NoOfQMarkInURL": "signos de interrogación",
+        "NoOfAmpersandInURL": 'caracteres "&"', "NoOfOtherSpecialCharsInURL": "caracteres inusuales",
+    },
+    "de": {
+        "URLLength": "Zeichen", "DomainLength": "Zeichen", "TLDLength": "Zeichen",
+        "NoOfSubDomain": "Subdomains", "NoOfObfuscatedChar": "kodierte Zeichen",
+        "NoOfLettersInURL": "Buchstaben", "NoOfDegitsInURL": "Ziffern",
+        "NoOfEqualsInURL": '"="-Zeichen', "NoOfQMarkInURL": "Fragezeichen",
+        "NoOfAmpersandInURL": '"&"-Zeichen', "NoOfOtherSpecialCharsInURL": "ungewöhnliche Zeichen",
+    },
+    "pt": {
+        "URLLength": "caracteres", "DomainLength": "caracteres", "TLDLength": "caracteres",
+        "NoOfSubDomain": "subdomínios", "NoOfObfuscatedChar": "caracteres codificados",
+        "NoOfLettersInURL": "letras", "NoOfDegitsInURL": "dígitos",
+        "NoOfEqualsInURL": 'sinais "="', "NoOfQMarkInURL": "pontos de interrogação",
+        "NoOfAmpersandInURL": 'caracteres "&"', "NoOfOtherSpecialCharsInURL": "caracteres invulgares",
+    },
+    "it": {
+        "URLLength": "caratteri", "DomainLength": "caratteri", "TLDLength": "caratteri",
+        "NoOfSubDomain": "sottodomini", "NoOfObfuscatedChar": "caratteri codificati",
+        "NoOfLettersInURL": "lettere", "NoOfDegitsInURL": "cifre",
+        "NoOfEqualsInURL": 'segni "="', "NoOfQMarkInURL": "punti interrogativi",
+        "NoOfAmpersandInURL": 'caratteri "&"', "NoOfOtherSpecialCharsInURL": "caratteri insoliti",
+    },
+}
+
+# Kenmerken die een verhouding (0-1) zijn: de uitleg krijgt een percentage.
+RATIO_FEATURES = {"LetterRatioInURL", "DegitRatioInURL", "ObfuscationRatio", "SpacialCharRatioInURL"}
+
+
+def _value_suffix(name, raw_value, lang):
+    if raw_value is None:
+        return ""
+    unit_labels = COUNT_UNIT_LABELS.get(lang, COUNT_UNIT_LABELS["nl"])
+    if name in unit_labels:
+        return f" ({raw_value} {unit_labels[name]})"
+    if name in RATIO_FEATURES:
+        return f" ({raw_value * 100:.0f}%)"
+    return ""
+
+
+def explain(model, feature_values_scaled, feature_names, lang="nl", top_n=3, raw_values=None):
     explanations = FEATURE_EXPLANATIONS.get(lang, FEATURE_EXPLANATIONS["nl"])
     contributions = model.coef_[0] * feature_values_scaled
     order = sorted(range(len(feature_names)), key=lambda i: abs(contributions[i]), reverse=True)
@@ -428,11 +509,17 @@ def explain(model, feature_values_scaled, feature_names, lang="nl", top_n=3):
         pushes_to_phishing = contributions[i] < 0
         pair = explanations.get(name)
         if pair:
-            reasons.append(pair[0] if pushes_to_phishing else pair[1])
+            text = pair[0] if pushes_to_phishing else pair[1]
+            raw_value = raw_values.get(name) if raw_values else None
+            reasons.append(text + _value_suffix(name, raw_value, lang))
     return reasons
 
 
 def analyse_url(url, model, scaler, tld_data, char_data, feature_order=FEATURE_ORDER, lang="nl"):
+    if is_trusted_domain(get_domain(url)):
+        reason = TRUSTED_DOMAIN_REASON.get(lang, TRUSTED_DOMAIN_REASON["nl"])
+        return "laag", [reason], 0.0
+
     features = extract_full_features(
         url,
         tld_prob_table=tld_data["table"],
@@ -445,7 +532,7 @@ def analyse_url(url, model, scaler, tld_data, char_data, feature_order=FEATURE_O
     proba = model.predict_proba(X_scaled)[0]
     p_phishing = proba[0]
     risk = classify_risk(p_phishing)
-    reasons = explain(model, X_scaled[0], feature_order, lang=lang)
+    reasons = explain(model, X_scaled[0], feature_order, lang=lang, raw_values=features)
     return risk, reasons, p_phishing
 
 
@@ -455,6 +542,10 @@ def analyse_url_and_website(url, model_b, scaler_b, feature_columns_b, vocab,
     en voorspelt met model B. Gooit WebsiteFetchError als de website niet
     (veilig) bezocht kon worden — de aanroeper vangt dat op en valt dan terug
     op analyse_url() (URL-only)."""
+    if is_trusted_domain(get_domain(url)):
+        reason = TRUSTED_DOMAIN_REASON.get(lang, TRUSTED_DOMAIN_REASON["nl"])
+        return "laag", [reason], 0.0
+
     url_features = extract_full_features(
         url,
         tld_prob_table=tld_data["table"],
@@ -475,5 +566,5 @@ def analyse_url_and_website(url, model_b, scaler_b, feature_columns_b, vocab,
     proba = model_b.predict_proba(X_scaled)[0]
     p_phishing = proba[0]
     risk = classify_risk(p_phishing)
-    reasons = explain(model_b, X_scaled[0], feature_columns_b, lang=lang)
+    reasons = explain(model_b, X_scaled[0], feature_columns_b, lang=lang, raw_values=raw_features)
     return risk, reasons, p_phishing

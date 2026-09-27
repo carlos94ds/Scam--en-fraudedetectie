@@ -1,5 +1,5 @@
 """
-Vertalingen voor de VerdachtLink-UI. Eén dict per taal met alle teksten die
+Vertalingen voor de ScamCheck-UI. Eén dict per taal met alle teksten die
 de hoofdpagina gebruikt, plus de lijst talen voor de taalkiezer bovenaan.
 """
 
@@ -16,6 +16,7 @@ LANGUAGES = {
 UI_TEXT = {
     "nl": {
         "lang_label": "🌐 Taal",
+        "slogan": "Bescherm jezelf tegen online oplichting.",
         "tagline": "Controleer snel of een link, e-mail, sms of social-mediabericht mogelijk onveilig is.",
         "tabs": [
             {
@@ -48,7 +49,7 @@ UI_TEXT = {
         "website_fetch_error": "De website kon niet (veilig) bezocht worden, dus is alleen de link zelf beoordeeld.",
         "method_badge_url_only": "URL-only analyse",
         "method_badge_url_website": "URL + website-analyse",
-        "risk_labels": {"laag": "Laag risico", "mogelijk": "Mogelijk risico", "hoog": "Hoog risico"},
+        "risk_labels": {"laag": "Laag risico", "mogelijk": "Mogelijk scam of fraude", "hoog": "Hoog risico"},
         "expander_title": "Meer over deze inschatting",
         "expander_text": (
             "Dit is een inschatting op basis van kenmerken van de link zelf, geen garantie. "
@@ -65,6 +66,7 @@ UI_TEXT = {
     },
     "en": {
         "lang_label": "🌐 Language",
+        "slogan": "Protect yourself from online fraud.",
         "tagline": "Quickly check whether a link, email, text message or social media message might be unsafe.",
         "tabs": [
             {
@@ -97,7 +99,7 @@ UI_TEXT = {
         "website_fetch_error": "The website could not be visited (safely), so only the link itself was assessed.",
         "method_badge_url_only": "URL-only analysis",
         "method_badge_url_website": "URL + website analysis",
-        "risk_labels": {"laag": "Low risk", "mogelijk": "Possible risk", "hoog": "High risk"},
+        "risk_labels": {"laag": "Low risk", "mogelijk": "Possible scam or fraud", "hoog": "High risk"},
         "expander_title": "More about this assessment",
         "expander_text": (
             "This is an estimate based on characteristics of the link itself, not a guarantee. "
@@ -114,6 +116,7 @@ UI_TEXT = {
     },
     "fr": {
         "lang_label": "🌐 Langue",
+        "slogan": "Protégez-vous contre la fraude en ligne.",
         "tagline": "Vérifiez rapidement si un lien, un e-mail, un SMS ou un message sur les réseaux sociaux est potentiellement dangereux.",
         "tabs": [
             {
@@ -146,7 +149,7 @@ UI_TEXT = {
         "website_fetch_error": "Le site n'a pas pu être visité (en toute sécurité), seul le lien lui-même a donc été évalué.",
         "method_badge_url_only": "Analyse URL uniquement",
         "method_badge_url_website": "Analyse URL + site web",
-        "risk_labels": {"laag": "Risque faible", "mogelijk": "Risque possible", "hoog": "Risque élevé"},
+        "risk_labels": {"laag": "Risque faible", "mogelijk": "Arnaque ou fraude possible", "hoog": "Risque élevé"},
         "expander_title": "En savoir plus sur cette évaluation",
         "expander_text": (
             "Il s'agit d'une estimation basée sur les caractéristiques du lien lui-même, pas d'une garantie. "
@@ -163,6 +166,7 @@ UI_TEXT = {
     },
     "es": {
         "lang_label": "🌐 Idioma",
+        "slogan": "Protégete contra el fraude en línea.",
         "tagline": "Comprueba rápidamente si un enlace, correo electrónico, SMS o mensaje de redes sociales podría ser inseguro.",
         "tabs": [
             {
@@ -195,7 +199,7 @@ UI_TEXT = {
         "website_fetch_error": "No se pudo visitar el sitio web (de forma segura), así que solo se evaluó el enlace en sí.",
         "method_badge_url_only": "Análisis solo de URL",
         "method_badge_url_website": "Análisis de URL + sitio web",
-        "risk_labels": {"laag": "Riesgo bajo", "mogelijk": "Riesgo posible", "hoog": "Riesgo alto"},
+        "risk_labels": {"laag": "Riesgo bajo", "mogelijk": "Posible estafa o fraude", "hoog": "Riesgo alto"},
         "expander_title": "Más información sobre esta valoración",
         "expander_text": (
             "Esto es una estimación basada en características del propio enlace, no una garantía. "
@@ -212,6 +216,7 @@ UI_TEXT = {
     },
     "de": {
         "lang_label": "🌐 Sprache",
+        "slogan": "Schütze dich vor Online-Betrug.",
         "tagline": "Prüfe schnell, ob ein Link, eine E-Mail, SMS oder Social-Media-Nachricht möglicherweise unsicher ist.",
         "tabs": [
             {
@@ -244,7 +249,7 @@ UI_TEXT = {
         "website_fetch_error": "Die Website konnte nicht (sicher) besucht werden, daher wurde nur der Link selbst bewertet.",
         "method_badge_url_only": "Nur-URL-Analyse",
         "method_badge_url_website": "URL + Website-Analyse",
-        "risk_labels": {"laag": "Geringes Risiko", "mogelijk": "Mögliches Risiko", "hoog": "Hohes Risiko"},
+        "risk_labels": {"laag": "Geringes Risiko", "mogelijk": "Möglicher Betrug oder Abzocke", "hoog": "Hohes Risiko"},
         "expander_title": "Mehr über diese Einschätzung",
         "expander_text": (
             "Dies ist eine Einschätzung anhand von Merkmalen des Links selbst, keine Garantie. "
@@ -261,6 +266,7 @@ UI_TEXT = {
     },
     "pt": {
         "lang_label": "🌐 Idioma",
+        "slogan": "Proteja-se contra a fraude online.",
         "tagline": "Verifique rapidamente se um link, e-mail, SMS ou mensagem de rede social pode ser inseguro.",
         "tabs": [
             {
@@ -293,7 +299,7 @@ UI_TEXT = {
         "website_fetch_error": "Não foi possível visitar o site (com segurança), por isso apenas o link em si foi avaliado.",
         "method_badge_url_only": "Análise apenas do URL",
         "method_badge_url_website": "Análise de URL + site",
-        "risk_labels": {"laag": "Risco baixo", "mogelijk": "Risco possível", "hoog": "Risco elevado"},
+        "risk_labels": {"laag": "Risco baixo", "mogelijk": "Possível fraude ou burla", "hoog": "Risco elevado"},
         "expander_title": "Mais sobre esta avaliação",
         "expander_text": (
             "Esta é uma estimativa baseada em características do próprio link, não é uma garantia. "
@@ -310,6 +316,7 @@ UI_TEXT = {
     },
     "it": {
         "lang_label": "🌐 Lingua",
+        "slogan": "Proteggiti dalla frode online.",
         "tagline": "Verifica rapidamente se un link, un'email, un SMS o un messaggio sui social media potrebbe non essere sicuro.",
         "tabs": [
             {
@@ -342,7 +349,7 @@ UI_TEXT = {
         "website_fetch_error": "Non è stato possibile visitare il sito web (in modo sicuro), quindi è stato valutato solo il link stesso.",
         "method_badge_url_only": "Analisi solo URL",
         "method_badge_url_website": "Analisi URL + sito web",
-        "risk_labels": {"laag": "Rischio basso", "mogelijk": "Rischio possibile", "hoog": "Rischio alto"},
+        "risk_labels": {"laag": "Rischio basso", "mogelijk": "Possibile truffa o frode", "hoog": "Rischio alto"},
         "expander_title": "Maggiori informazioni su questa valutazione",
         "expander_text": (
             "Questa è una stima basata sulle caratteristiche del link stesso, non una garanzia. "
@@ -384,8 +391,8 @@ def sidebar_language_selector():
 PAGES_TEXT = {
     "over": {
         "nl": {
-            "page_title": "Over VerdachtLink",
-            "title": "Over VerdachtLink",
+            "page_title": "Over ScamCheck",
+            "title": "Over ScamCheck",
             "body": """
 ### Doel van deze applicatie
 
@@ -394,7 +401,7 @@ bericht op social media te vertrouwen is. Verdachte berichten zien er vaak
 overtuigend uit, en de meeste mensen hebben geen technische kennis van
 phishing, domeinen of beveiligde verbindingen om dat zelf te controleren.
 
-VerdachtLink is gebouwd om die inschatting toegankelijker te maken. Je plakt
+ScamCheck is gebouwd om die inschatting toegankelijker te maken. Je plakt
 een link of bericht, en de applicatie geeft in gewone taal een indicatie van
 het risico — zonder dat je zelf iets hoeft te begrijpen van de techniek
 erachter.
@@ -425,8 +432,8 @@ zonder technische achtergrond.
 """,
         },
         "en": {
-            "page_title": "About VerdachtLink",
-            "title": "About VerdachtLink",
+            "page_title": "About ScamCheck",
+            "title": "About ScamCheck",
             "body": """
 ### Purpose of this application
 
@@ -435,7 +442,7 @@ social media message can be trusted. Suspicious messages often look
 convincing, and most people don't have the technical knowledge of
 phishing, domains or secure connections to check this themselves.
 
-VerdachtLink was built to make that assessment more accessible. You paste
+ScamCheck was built to make that assessment more accessible. You paste
 a link or message, and the application gives a plain-language indication
 of the risk — without you needing to understand the technology behind it.
 
@@ -465,8 +472,8 @@ accessible for people without a technical background.
 """,
         },
         "fr": {
-            "page_title": "À propos de VerdachtLink",
-            "title": "À propos de VerdachtLink",
+            "page_title": "À propos de ScamCheck",
+            "title": "À propos de ScamCheck",
             "body": """
 ### Objectif de cette application
 
@@ -476,7 +483,7 @@ paraissent souvent convaincants, et la plupart des gens n'ont pas les
 connaissances techniques sur le phishing, les domaines ou les connexions
 sécurisées pour le vérifier eux-mêmes.
 
-VerdachtLink a été conçu pour rendre cette évaluation plus accessible.
+ScamCheck a été conçu pour rendre cette évaluation plus accessible.
 Vous collez un lien ou un message, et l'application donne en langage
 simple une indication du risque — sans que vous ayez besoin de comprendre
 la technique sous-jacente.
@@ -509,8 +516,8 @@ phishing plus accessible aux personnes sans formation technique.
 """,
         },
         "es": {
-            "page_title": "Acerca de VerdachtLink",
-            "title": "Acerca de VerdachtLink",
+            "page_title": "Acerca de ScamCheck",
+            "title": "Acerca de ScamCheck",
             "body": """
 ### Objetivo de esta aplicación
 
@@ -520,7 +527,7 @@ sospechosos suelen parecer convincentes, y la mayoría de las personas no
 tienen conocimientos técnicos sobre phishing, dominios o conexiones
 seguras para comprobarlo por sí mismas.
 
-VerdachtLink se creó para hacer esa evaluación más accesible. Pegas un
+ScamCheck se creó para hacer esa evaluación más accesible. Pegas un
 enlace o mensaje, y la aplicación da una indicación del riesgo en lenguaje
 sencillo, sin que tengas que entender la tecnología detrás de ello.
 
@@ -551,8 +558,8 @@ más accesible para personas sin formación técnica.
 """,
         },
         "de": {
-            "page_title": "Über VerdachtLink",
-            "title": "Über VerdachtLink",
+            "page_title": "Über ScamCheck",
+            "title": "Über ScamCheck",
             "body": """
 ### Zweck dieser Anwendung
 
@@ -562,7 +569,7 @@ Nachrichten wirken oft überzeugend, und die meisten Menschen haben nicht
 das technische Wissen über Phishing, Domains oder sichere Verbindungen,
 um das selbst zu prüfen.
 
-VerdachtLink wurde entwickelt, um diese Einschätzung zugänglicher zu
+ScamCheck wurde entwickelt, um diese Einschätzung zugänglicher zu
 machen. Du fügst einen Link oder eine Nachricht ein, und die Anwendung
 gibt in einfacher Sprache eine Einschätzung des Risikos — ohne dass du
 die dahinterliegende Technik verstehen musst.
@@ -595,8 +602,8 @@ ohne technischen Hintergrund zugänglicher zu machen.
 """,
         },
         "pt": {
-            "page_title": "Sobre a VerdachtLink",
-            "title": "Sobre a VerdachtLink",
+            "page_title": "Sobre a ScamCheck",
+            "title": "Sobre a ScamCheck",
             "body": """
 ### Objetivo desta aplicação
 
@@ -606,7 +613,7 @@ convincentes, e a maioria das pessoas não tem conhecimento técnico sobre
 phishing, domínios ou ligações seguras para verificar isso por si
 mesmas.
 
-A VerdachtLink foi criada para tornar essa avaliação mais acessível. Colas
+A ScamCheck foi criada para tornar essa avaliação mais acessível. Colas
 um link ou mensagem, e a aplicação dá uma indicação do risco em linguagem
 simples — sem que precises de perceber a tecnologia por trás disso.
 
@@ -637,8 +644,8 @@ phishing mais acessível para pessoas sem formação técnica.
 """,
         },
         "it": {
-            "page_title": "Informazioni su VerdachtLink",
-            "title": "Informazioni su VerdachtLink",
+            "page_title": "Informazioni su ScamCheck",
+            "title": "Informazioni su ScamCheck",
             "body": """
 ### Obiettivo di questa applicazione
 
@@ -648,7 +655,7 @@ sembrano convincenti, e la maggior parte delle persone non ha le
 conoscenze tecniche su phishing, domini o connessioni sicure per
 verificarlo da sola.
 
-VerdachtLink è stata creata per rendere questa valutazione più
+ScamCheck è stata creata per rendere questa valutazione più
 accessibile. Incolli un link o un messaggio, e l'applicazione fornisce
 un'indicazione del rischio in linguaggio semplice — senza che tu debba
 capire la tecnologia che c'è dietro.
@@ -1062,7 +1069,7 @@ biglietto aereo.
 - Meld het bericht bij de organisatie waarvan de afzender zich voordeed, en
   waar mogelijk bij een officiële meldpunt voor phishing en fraude.
 
-VerdachtLink helpt bij het inschatten van risico, maar vervangt geen
+ScamCheck helpt bij het inschatten van risico, maar vervangt geen
 gezond wantrouwen: bij twijfel is het altijd veiliger om een link niet te
 openen.
 """,
@@ -1106,7 +1113,7 @@ openen.
 - Report the message to the organisation the sender pretended to be, and
   where possible to an official reporting point for phishing and fraud.
 
-VerdachtLink helps assess risk, but doesn't replace healthy suspicion: if
+ScamCheck helps assess risk, but doesn't replace healthy suspicion: if
 in doubt, it's always safer not to open a link.
 """,
         },
@@ -1155,7 +1162,7 @@ in doubt, it's always safer not to open a link.
   l'identité, et si possible à un point de signalement officiel pour le
   phishing et la fraude.
 
-VerdachtLink aide à évaluer le risque, mais ne remplace pas une méfiance
+ScamCheck aide à évaluer le risque, mais ne remplace pas une méfiance
 saine : en cas de doute, il est toujours plus sûr de ne pas ouvrir un
 lien.
 """,
@@ -1200,7 +1207,7 @@ lien.
 - Informa del mensaje a la organización suplantada, y si es posible a un
   punto de denuncia oficial de phishing y fraude.
 
-VerdachtLink ayuda a valorar el riesgo, pero no sustituye una sana
+ScamCheck ayuda a valorar el riesgo, pero no sustituye una sana
 desconfianza: si tienes dudas, siempre es más seguro no abrir un enlace.
 """,
         },
@@ -1248,7 +1255,7 @@ desconfianza: si tienes dudas, siempre es más seguro no abrir un enlace.
   ausgegeben hat, und wo möglich bei einer offiziellen Meldestelle für
   Phishing und Betrug.
 
-VerdachtLink hilft bei der Risikoeinschätzung, ersetzt aber kein
+ScamCheck hilft bei der Risikoeinschätzung, ersetzt aber kein
 gesundes Misstrauen: im Zweifel ist es immer sicherer, einen Link nicht
 zu öffnen.
 """,
@@ -1294,7 +1301,7 @@ zu öffnen.
 - Reporta a mensagem à organização que o remetente fingiu ser, e, se
   possível, a um ponto de denúncia oficial de phishing e fraude.
 
-A VerdachtLink ajuda a avaliar o risco, mas não substitui uma
+A ScamCheck ajuda a avaliar o risco, mas não substitui uma
 desconfiança saudável: em caso de dúvida, é sempre mais seguro não abrir
 um link.
 """,
@@ -1341,7 +1348,7 @@ um link.
   finto, e, dove possibile, a un punto di segnalazione ufficiale per
   phishing e frodi.
 
-VerdachtLink aiuta a valutare il rischio, ma non sostituisce una sana
+ScamCheck aiuta a valutare il rischio, ma non sostituisce una sana
 diffidenza: in caso di dubbio, è sempre più sicuro non aprire un link.
 """,
         },

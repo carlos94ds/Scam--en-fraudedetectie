@@ -1,5 +1,5 @@
 """
-VerdachtLink - hoofdpagina: gebruiker plakt een link, e-mail, sms of
+ScamCheck - hoofdpagina: gebruiker plakt een link, e-mail, sms of
 social-media-bericht, het systeem haalt de link(en) eruit en geeft per link
 een begrijpelijke risico-inschatting. Analyseert alleen de tekst van de
 link, bezoekt de website zelf niet. De logica staat in app/logic.py.
@@ -22,9 +22,9 @@ from logic import (
     load_website_resources,
 )
 from i18n import LANGUAGES, UI_TEXT
+from styles import inject_css, inject_pwa_tags
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
-LOGO_PATH = os.path.join(os.path.dirname(__file__), "assets", "logo.png")
 
 RISK_STYLES = {
     "laag": {"color": "#1E7D32", "bg": "#F0F7F1", "border": "#1E7D32"},
@@ -43,37 +43,6 @@ def cached_resources():
 @st.cache_resource
 def cached_website_resources():
     return load_website_resources(MODEL_DIR)
-
-
-def inject_css():
-    st.markdown(
-        '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">',
-        unsafe_allow_html=True,
-    )
-    css = """
-<style>
-html, body, [class*="css"] { font-family: 'Inter', -apple-system, sans-serif; font-size: 16px; }
-.stApp { background: linear-gradient(180deg, #F7F8FD 0%, #FFFFFF 320px); }
-h1 { font-size: 2.1rem !important; font-weight: 800 !important; letter-spacing: -0.02em; background: linear-gradient(90deg, #4F46E5, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.1rem !important; }
-.tagline { color: #5B5F73; font-size: 1.05rem; margin-bottom: 1.75rem; }
-p, li, label { font-size: 1rem; }
-.stTabs [data-baseweb="tab-list"] { gap: 4px; border-bottom: 1px solid #E4E6F1; }
-.stTabs [data-baseweb="tab"] { height: 44px; border-radius: 8px 8px 0 0; font-weight: 600; color: #5B5F73; }
-.stTabs [aria-selected="true"] { color: #4F46E5 !important; background-color: #EEF0FC; }
-.stButton>button { font-size: 0.95rem; padding: 0.6rem 1.8rem; border-radius: 10px; font-weight: 600; background: linear-gradient(90deg, #4F46E5, #6D28D9); color: white; border: none; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25); transition: transform 0.15s ease, box-shadow 0.15s ease; }
-.stButton>button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(79, 70, 229, 0.35); color: white; }
-.stTextArea textarea { font-size: 1rem; border-radius: 10px !important; border: 1.5px solid #E4E6F1 !important; }
-.stTextArea textarea:focus { border-color: #4F46E5 !important; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important; }
-.result-card { border-radius: 12px; padding: 1.1rem 1.4rem; margin: 0.9rem 0; box-shadow: 0 2px 10px rgba(18, 20, 28, 0.06); border: 1px solid rgba(18, 20, 28, 0.04); position: relative; overflow: hidden; }
-.result-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background-color: var(--accent-color, #4F46E5); }
-.result-label { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
-.method-badge { margin-left: auto; font-size: 0.72rem; font-weight: 600; color: #5B5F73; background-color: rgba(18, 20, 28, 0.05); border-radius: 999px; padding: 0.2rem 0.65rem; letter-spacing: 0.01em; }
-.result-url { font-size: 0.88rem; color: #5B5F73; word-break: break-all; margin-bottom: 0.5rem; font-family: 'SFMono-Regular', Consolas, monospace; }
-.tab-uitleg { color: #5B5F73; margin-bottom: 0.9rem; }
-[data-testid="stSidebar"] { background-color: #F7F8FD; border-right: 1px solid #E4E6F1; }
-</style>
-"""
-    st.markdown(css, unsafe_allow_html=True)
 
 
 def render_result(url, risk, reasons, text, used_website=False):
@@ -145,17 +114,16 @@ def render_checker_tab(tab_config, tab_key, lang, text):
 
 
 def main():
-    st.set_page_config(page_title="VerdachtLink", page_icon=LOGO_PATH, layout="centered")
+    st.set_page_config(page_title="ScamCheck", page_icon="🔎", layout="wide")
     inject_css()
+    inject_pwa_tags()
 
     if "lang" not in st.session_state:
         st.session_state["lang"] = "nl"
 
-    col_logo, col_title, col_lang = st.columns([1, 5, 2])
-    with col_logo:
-        st.image(LOGO_PATH, width=64)
+    col_title, col_lang = st.columns([5, 2])
     with col_title:
-        st.title("VerdachtLink")
+        st.title("ScamCheck")
     with col_lang:
         lang_codes = list(LANGUAGES.keys())
         selected = st.selectbox(
@@ -171,6 +139,7 @@ def main():
     text = UI_TEXT[lang]
 
     st.markdown(
+        f'<div class="slogan">{text["slogan"]}</div>'
         f'<div class="tagline">{text["tagline"]}</div>',
         unsafe_allow_html=True,
     )
@@ -183,8 +152,7 @@ def main():
     with st.expander(text["expander_title"]):
         st.caption(text["expander_text"])
 
-    st.sidebar.image(LOGO_PATH, width=56)
-    st.sidebar.markdown("### VerdachtLink")
+    st.sidebar.markdown("### ScamCheck")
     st.sidebar.caption(text["sidebar_caption"])
 
 

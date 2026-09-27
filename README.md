@@ -28,6 +28,7 @@ streamlit run app/app.py
 
 ## Deployment
 
-De app draait live op Streamlit Community Cloud — zie
-[`docs/deployment.md`](docs/deployment.md) voor hoe dat is opgezet en hoe
-je 'm bijwerkt.
+De app draait live op Streamlit Community Cloud en kan ook op Railway
+gehost worden — zie [`docs/deployment.md`](docs/deployment.md). Eenmaal
+live is de app ook als PWA op een telefoon te installeren (zonder App
+Store), zie hetzelfde document.

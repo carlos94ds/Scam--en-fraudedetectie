@@ -29,7 +29,7 @@ from bs4 import BeautifulSoup
 MAX_DOWNLOAD_BYTES = 2 * 1024 * 1024  # 2 MB: genoeg voor de meeste HTML, voorkomt geheugenmisbruik
 REQUEST_TIMEOUT = 6  # seconden, connect + read gecombineerd via 'timeout='
 MAX_REDIRECTS = 5
-USER_AGENT = "VerdachtLink/1.0 (+educatief project; analyseert alleen structuur, geen inhoud)"
+USER_AGENT = "ScamCheck/1.0 (+educatief project; analyseert alleen structuur, geen inhoud)"
 
 SOCIAL_DOMAINS = (
     "facebook.com", "instagram.com", "twitter.com", "x.com", "linkedin.com",

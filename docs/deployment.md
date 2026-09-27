@@ -1,4 +1,9 @@
-# Deployment (Streamlit Community Cloud)
+# Deployment
+
+De app kan op twee plekken gehost worden: Streamlit Community Cloud (huidige
+hosting) of Railway. Beide draaien dezelfde code zonder aanpassingen nodig.
+
+## Optie A: Streamlit Community Cloud
 
 Deze app wordt gehost op [Streamlit Community Cloud](https://share.streamlit.io),
 gratis hosting voor Streamlit-apps die rechtstreeks vanaf een GitHub-repo
@@ -57,3 +62,41 @@ bestanden niet hebt gecommit (of andersom), valt de app automatisch terug
 op URL-only-analyse — zie `website_resources_available()` in
 `app/logic.py`. Er gaat dus niets stuk als een van de twee modellen
 ontbreekt, de bijbehorende functionaliteit is dan alleen niet zichtbaar.
+
+## Optie B: Railway
+
+[Railway](https://railway.app) draait de app vanuit dezelfde repo, maar als
+een "gewone" webserver op een zelfgekozen poort in plaats van Streamlit's
+eigen platform. Het `Procfile` in de root van de repo regelt het
+opstartcommando; Railway (via Nixpacks) herkent Python automatisch aan
+`requirements.txt`.
+
+1. Ga naar <https://railway.app>, log in met GitHub en klik **New Project
+   → Deploy from GitHub repo**.
+2. Kies deze repository (`main`-branch).
+3. Railway detecteert `requirements.txt` en `Procfile` automatisch — geen
+   extra configuratie nodig. De `$PORT`-omgevingsvariabele wordt door
+   Railway zelf gezet; het `Procfile` gebruikt die al
+   (`--server.port=$PORT --server.address=0.0.0.0`).
+4. Na de build krijg je een publieke `*.up.railway.app`-URL (onder
+   **Settings → Networking → Generate Domain**).
+
+Net als bij Streamlit Cloud zijn er geen secrets nodig — alleen de
+meegecommitte modelbestanden in `models/`.
+
+### Installeren als app op de telefoon (PWA)
+
+De app is een Progressive Web App: eenmaal live (op Railway of Streamlit
+Cloud) kunnen bezoekers 'm op hun startscherm zetten zonder App
+Store/Play Store.
+
+- **Android (Chrome)**: menu (⋮) → **App installeren** / **Toevoegen aan
+  startscherm**.
+- **iPhone (Safari)**: deelknop (□↑) → **Zet op beginscherm**.
+
+Dit werkt via `app/static/manifest.json` en de iconen in `app/static/`
+(`enableStaticServing = true` in `.streamlit/config.toml`), die via een
+klein script in `app/styles.py` (`inject_pwa_tags()`) in de paginakop
+gezet worden — Streamlit ondersteunt dit niet standaard. Belangrijk: dit
+werkt alléén via de publieke `https://`-URL na deployment, niet via
+`localhost`.

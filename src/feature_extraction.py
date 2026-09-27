@@ -19,11 +19,18 @@ def _char_class(ch):
     return "other"
 
 
+def get_domain(url: str) -> str:
+    """Haalt kaal de domeinnaam (zonder poortnummer) uit een URL-string."""
+    url = url.strip()
+    parsed = urlparse(url if "://" in url else f"http://{url}")
+    return parsed.netloc.split(":")[0]
+
+
 def extract_base_features(url: str) -> dict:
     """Berekent de kenmerken die puur uit de tekst van de URL zelf volgen."""
     url = url.strip()
     parsed = urlparse(url if "://" in url else f"http://{url}")
-    domain = parsed.netloc.split(":")[0]  # poortnummer eraf, indien aanwezig
+    domain = get_domain(url)
     domain_parts = domain.split(".") if domain else []
 
     is_ip = 1 if IP_PATTERN.match(domain) else 0
